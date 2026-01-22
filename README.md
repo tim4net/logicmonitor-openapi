@@ -24,16 +24,22 @@ This repository contains an enhanced OpenAPI specification for LogicMonitor's mo
 
 <img src="assets/rewst-icon.svg" alt="Rewst" width="32" align="left" style="margin-right: 10px;">
 
-A trimmed, Rewst-compatible version of the spec is available for use with [Rewst Custom Integration v2](https://docs.rewst.io/).
+Two Rewst-compatible specs are available for [Rewst Custom Integration v2](https://docs.rewst.io/):
 
-### Why a Separate Spec?
+| Version | File | Operations | Size | Best For |
+|---------|------|------------|------|----------|
+| **Standard** | `logicmonitor-rewst.json` | 64 | 124KB | Common monitoring workflows |
+| **Advanced** | `logicmonitor-rewst-advanced.json` | 177 | 472KB | Full MSP management with RBAC, audit, config |
 
-The full LogicMonitor OpenAPI spec (353 operations, ~2MB) exceeds Custom Integration v2's size limits and uses LMv1 HMAC authentication which isn't supported. The Rewst version:
+**Start with Standard** unless you need advanced features like role management, API token lifecycle, or configuration backup operations.
 
-- **64 operations** covering common monitoring workflows
-- **124KB** file size (94% smaller)
+### Why Separate Specs?
+
+The full LogicMonitor OpenAPI spec (353 operations, ~2MB) exceeds Custom Integration v2's size limits and uses LMv1 HMAC authentication which isn't supported. Both Rewst versions use:
+
 - **Bearer token auth** instead of LMv1 signatures
 - **Server variables** for multi-tenant configuration
+- **Compact size** optimized for Rewst's limits
 
 ### Quick Setup
 
