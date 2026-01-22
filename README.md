@@ -22,7 +22,7 @@ This repository contains an enhanced OpenAPI specification for LogicMonitor's mo
 
 ## Rewst Custom Integration v2
 
-<img src="assets/logicmonitor-icon.svg" alt="LogicMonitor" width="32" align="left" style="margin-right: 10px;">
+<img src="assets/rewst-icon.svg" alt="Rewst" width="32" align="left" style="margin-right: 10px;">
 
 A trimmed, Rewst-compatible version of the spec is available for use with [Rewst Custom Integration v2](https://docs.rewst.io/).
 
