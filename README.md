@@ -72,11 +72,55 @@ The full LogicMonitor OpenAPI spec (353 operations, ~2MB) exceeds Custom Integra
 | **OpsNotes** | List, Get, Create, Update, Delete | 5 |
 | | **Total** | **64** |
 
-### File
+### Available Specs
 
-| File | Description |
-|------|-------------|
-| `logicmonitor-rewst.json` | Rewst CI v2 compatible spec (64 operations, 124KB) |
+| File | Operations | Size | Use Case |
+|------|------------|------|----------|
+| `logicmonitor-rewst.json` | 64 | 124KB | Standard monitoring workflows |
+| `logicmonitor-rewst-advanced.json` | 177 | 472KB | Advanced MSP with RBAC, audit, config management |
+
+---
+
+## Advanced Spec Details
+
+The advanced spec (`logicmonitor-rewst-advanced.json`) includes everything in the standard spec plus 113 additional operations for comprehensive MSP management.
+
+### Additional Categories in Advanced Spec
+
+| Category | Operations | Description |
+|----------|------------|-------------|
+| **Roles** | List, Get, Create, Update, Delete, CRUD | Role-based access control |
+| **API Tokens** | List all, List by admin, Get, Create, Delete | Token lifecycle management |
+| **Access Groups** | List, Get, Create, Update, Add, Map/Unmap | Resource access control |
+| **Access Logs** | List, Get | Audit trail and compliance |
+| **Recipient Groups** | List, Get, Create, Update, Delete | Alert routing configuration |
+| **ConfigSources** | List, Get, Update reasons | Configuration backup management |
+| **EventSources** | List, Get | Event monitoring definitions |
+| **PropertyRules** | List, Get | Property assignment automation |
+| **LogSources** | List, Get | Log ingestion configuration |
+| **TopologySources** | List, Get | Network topology mapping |
+| **Widgets** | List, Get, Create, Update, Delete, Get Data | Dashboard widget management |
+| **Report Groups** | List, Get, Create, Update, Delete | Report organization |
+| **Log Partitions** | List, Get, Update, Actions, Retentions | Log storage management |
+| **Log Query Groups** | List, Get, Create, Update, Delete, Move | Saved log queries |
+| **Batch Jobs** | List, Get | Batch job monitoring |
+| **AppliesToFunctions** | List, Get, Create, Update, Delete | AppliesTo helper functions |
+| **OIDs** | List, Get | SNMP OID management |
+| **Collector Management** | Ack down, Installers, Versions | Advanced collector ops |
+| **Device Properties** | Get/Set individual properties | Granular property management |
+| **Device Group Properties** | List, Get, Create, Update, Delete | Group-level properties |
+| **SDT History** | Device, Group, Website SDT history | Historical SDT tracking |
+| **Resource SDTs** | SDTs per device, group, website | Resource-specific SDT management |
+| **Alert Settings** | Device, Instance, Group alert config | Threshold customization |
+| **Instance Config** | Config collection, diff, history | ConfigSource instance data |
+| **Device Datasource Groups** | Instance grouping and data | Datasource organization |
+| **Unmonitored Devices** | List discovered but unmonitored | Discovery management |
+| **Device Delta** | Change tracking | Device change detection |
+| **Cost Optimization** | Recommendations, Categories | Cost management |
+| **Usage Metrics** | Usage, Summary, Contract info | License and capacity |
+| **Graph Data** | Instance, widget, website graphs | Data visualization |
+| **Diagnostics** | Diagnostic sources | Troubleshooting tools |
+| **Integration Audit** | Integration audit logs | Integration monitoring |
 
 ---
 
@@ -86,7 +130,8 @@ The full LogicMonitor OpenAPI spec (353 operations, ~2MB) exceeds Custom Integra
 |------|-------------|
 | `openapi.json` | OpenAPI 3.0 specification (JSON format) |
 | `openapi.yaml` | OpenAPI 3.0 specification (YAML format) |
-| `logicmonitor-rewst.json` | Rewst Custom Integration v2 compatible spec (64 operations) |
+| `logicmonitor-rewst.json` | Rewst CI v2 spec - standard (64 operations) |
+| `logicmonitor-rewst-advanced.json` | Rewst CI v2 spec - advanced MSP (177 operations) |
 | `source/` | Original specifications from LogicMonitor |
 
 ## Quick Start
