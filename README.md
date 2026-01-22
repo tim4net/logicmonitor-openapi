@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/logicmonitor-logo.svg" alt="LogicMonitor" width="300">
+</p>
+
 # LogicMonitor OpenAPI Specification
 
 [![OpenAPI 3.0](https://img.shields.io/badge/OpenAPI-3.0-green.svg)](https://www.openapis.org/)

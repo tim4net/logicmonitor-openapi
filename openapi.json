@@ -19,7 +19,7 @@
     },
     "termsOfService": "https://www.logicmonitor.com/terms",
     "x-logo": {
-      "url": "https://www.logicmonitor.com/wp-content/uploads/2020/10/LogicMonitor-Logo-e1603306891993.png",
+      "url": "https://raw.githubusercontent.com/tim4net/logicmonitor-openapi/main/assets/logicmonitor-logo.svg",
       "altText": "LogicMonitor"
     }
   },
