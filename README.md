@@ -30,8 +30,8 @@ A trimmed, Rewst-compatible version of the spec is available for use with [Rewst
 
 The full LogicMonitor OpenAPI spec (353 operations, ~2MB) exceeds Custom Integration v2's size limits and uses LMv1 HMAC authentication which isn't supported. The Rewst version:
 
-- **30 operations** covering the most common workflows
-- **54KB** file size (97% smaller)
+- **64 operations** covering common monitoring workflows
+- **124KB** file size (94% smaller)
 - **Bearer token auth** instead of LMv1 signatures
 - **Server variables** for multi-tenant configuration
 
@@ -50,21 +50,33 @@ The full LogicMonitor OpenAPI spec (353 operations, ~2MB) exceeds Custom Integra
 
 ### Included Endpoints
 
-| Category | Operations |
-|----------|------------|
-| **Devices** | List, Get, Create, Update, Delete, Properties |
-| **Device Groups** | List, Get, Create, Update, Delete, Get Devices |
-| **Alerts** | List, Get, Acknowledge, Add Note |
-| **Collectors** | List, Get |
-| **SDTs** | List, Get, Create, Update, Delete |
-| **Dashboards** | List, Get |
-| **Admins** | List, Get |
+| Category | Operations | Count |
+|----------|------------|-------|
+| **Devices** | List, Get, Create, Update, Delete, Get Properties | 6 |
+| **Device Groups** | List, Get, Create, Update, Delete, Get Devices | 6 |
+| **Alerts** | List, Get, Acknowledge, Add Note | 4 |
+| **Collectors** | List, Get | 2 |
+| **Collector Groups** | List, Get | 2 |
+| **SDTs** | List, Get, Create, Update, Delete | 5 |
+| **Dashboards** | List, Get | 2 |
+| **Dashboard Groups** | List, Get | 2 |
+| **Admins** | List, Get | 2 |
+| **Websites** | List, Get, Create, Update, Delete | 5 |
+| **Website Groups** | List, Get, Create, Update, Delete | 5 |
+| **Reports** | List, Get, Generate | 3 |
+| **Datasources** | List, Get, List Device Datasources | 3 |
+| **Datasource Instances** | List Instances, Get Instance Data | 2 |
+| **Alert Rules** | List, Get | 2 |
+| **Escalation Chains** | List, Get | 2 |
+| **Netscans** | List, Get | 2 |
+| **OpsNotes** | List, Get, Create, Update, Delete | 5 |
+| | **Total** | **64** |
 
 ### File
 
 | File | Description |
 |------|-------------|
-| `logicmonitor-rewst.json` | Rewst CI v2 compatible spec (30 operations) |
+| `logicmonitor-rewst.json` | Rewst CI v2 compatible spec (64 operations, 124KB) |
 
 ---
 
@@ -74,7 +86,7 @@ The full LogicMonitor OpenAPI spec (353 operations, ~2MB) exceeds Custom Integra
 |------|-------------|
 | `openapi.json` | OpenAPI 3.0 specification (JSON format) |
 | `openapi.yaml` | OpenAPI 3.0 specification (YAML format) |
-| `logicmonitor-rewst.json` | Rewst Custom Integration v2 compatible spec |
+| `logicmonitor-rewst.json` | Rewst Custom Integration v2 compatible spec (64 operations) |
 | `source/` | Original specifications from LogicMonitor |
 
 ## Quick Start

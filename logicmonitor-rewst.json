@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.3",
   "info": {
-    "title": "LogicMonitor Rewst Integration",
+    "title": "LogicMonitor",
     "description": "Trimmed LogicMonitor REST API for Rewst Custom Integration v2. Includes core device, alert, collector, SDT, and dashboard management endpoints. Uses Bearer token authentication - generate tokens via the LogicMonitor admin portal.",
     "version": "1.0.0",
     "contact": {
@@ -33,7 +33,17 @@
     { "name": "Collectors", "description": "Collector management" },
     { "name": "SDTs", "description": "Scheduled Downtime management" },
     { "name": "Dashboards", "description": "Dashboard management" },
-    { "name": "Admins", "description": "Admin/user management" }
+    { "name": "Admins", "description": "Admin/user management" },
+    { "name": "Websites", "description": "Website monitoring management" },
+    { "name": "Website Groups", "description": "Website group management" },
+    { "name": "Reports", "description": "Report management and generation" },
+    { "name": "Datasources", "description": "Datasource configuration and device datasources" },
+    { "name": "Alert Rules", "description": "Alert rule configuration" },
+    { "name": "Escalation Chains", "description": "Alert escalation chain management" },
+    { "name": "Netscans", "description": "Network discovery scans" },
+    { "name": "Collector Groups", "description": "Collector group management" },
+    { "name": "Dashboard Groups", "description": "Dashboard group management" },
+    { "name": "OpsNotes", "description": "Operational notes and annotations" }
   ],
   "paths": {
     "/device/devices": {
@@ -936,6 +946,1058 @@
           "500": { "$ref": "#/components/responses/InternalServerError" }
         }
       }
+    },
+    "/website/websites": {
+      "get": {
+        "summary": "List websites",
+        "description": "Retrieve a paginated list of monitored websites",
+        "operationId": "getWebsiteList",
+        "tags": ["Websites"],
+        "parameters": [
+          { "$ref": "#/components/parameters/fields" },
+          { "$ref": "#/components/parameters/size" },
+          { "$ref": "#/components/parameters/offset" },
+          { "$ref": "#/components/parameters/filter" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved website list",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/WebsitePaginationResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      },
+      "post": {
+        "summary": "Add website",
+        "description": "Add a new website to monitoring",
+        "operationId": "addWebsite",
+        "tags": ["Websites"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/WebsiteInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully added website",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Website" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
+    },
+    "/website/websites/{id}": {
+      "get": {
+        "summary": "Get website by ID",
+        "description": "Retrieve a specific website by its ID",
+        "operationId": "getWebsiteById",
+        "tags": ["Websites"],
+        "parameters": [
+          { "$ref": "#/components/parameters/websiteId" },
+          { "$ref": "#/components/parameters/fields" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved website",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Website" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      },
+      "put": {
+        "summary": "Update website",
+        "description": "Update an existing website",
+        "operationId": "updateWebsiteById",
+        "tags": ["Websites"],
+        "parameters": [
+          { "$ref": "#/components/parameters/websiteId" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/WebsiteInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated website",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Website" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      },
+      "delete": {
+        "summary": "Delete website",
+        "description": "Delete a website from monitoring",
+        "operationId": "deleteWebsiteById",
+        "tags": ["Websites"],
+        "parameters": [
+          { "$ref": "#/components/parameters/websiteId" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted website",
+            "content": {
+              "application/json": {
+                "schema": { "type": "object" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
+    },
+    "/website/websites/{id}/alerts": {
+      "get": {
+        "summary": "Get website alerts",
+        "description": "Retrieve alerts for a specific website",
+        "operationId": "getWebsiteAlertListByWebsiteId",
+        "tags": ["Websites", "Alerts"],
+        "parameters": [
+          { "$ref": "#/components/parameters/websiteId" },
+          { "$ref": "#/components/parameters/fields" },
+          { "$ref": "#/components/parameters/size" },
+          { "$ref": "#/components/parameters/offset" },
+          { "$ref": "#/components/parameters/filter" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved website alerts",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AlertPaginationResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
+    },
+    "/report/reports": {
+      "get": {
+        "summary": "List reports",
+        "description": "Retrieve a paginated list of reports",
+        "operationId": "getReportList",
+        "tags": ["Reports"],
+        "parameters": [
+          { "$ref": "#/components/parameters/fields" },
+          { "$ref": "#/components/parameters/size" },
+          { "$ref": "#/components/parameters/offset" },
+          { "$ref": "#/components/parameters/filter" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved report list",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ReportPaginationResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
+    },
+    "/report/reports/{id}": {
+      "get": {
+        "summary": "Get report by ID",
+        "description": "Retrieve a specific report by its ID",
+        "operationId": "getReportById",
+        "tags": ["Reports"],
+        "parameters": [
+          { "$ref": "#/components/parameters/reportId" },
+          { "$ref": "#/components/parameters/fields" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved report",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Report" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
+    },
+    "/report/reports/{id}/executions": {
+      "post": {
+        "summary": "Run report",
+        "description": "Generate/run a report by its ID",
+        "operationId": "generateReportById",
+        "tags": ["Reports"],
+        "parameters": [
+          { "$ref": "#/components/parameters/reportId" }
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/GenerateReportRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully generated report",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/GenerateReportResult" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
+    },
+    "/setting/datasources": {
+      "get": {
+        "summary": "List datasources",
+        "description": "Retrieve a paginated list of datasource definitions",
+        "operationId": "getDatasourceList",
+        "tags": ["Datasources"],
+        "parameters": [
+          { "$ref": "#/components/parameters/fields" },
+          { "$ref": "#/components/parameters/size" },
+          { "$ref": "#/components/parameters/offset" },
+          { "$ref": "#/components/parameters/filter" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved datasource list",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/DatasourcePaginationResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
+    },
+    "/setting/datasources/{id}": {
+      "get": {
+        "summary": "Get datasource by ID",
+        "description": "Retrieve a specific datasource definition by its ID",
+        "operationId": "getDatasourceById",
+        "tags": ["Datasources"],
+        "parameters": [
+          { "$ref": "#/components/parameters/datasourceId" },
+          { "$ref": "#/components/parameters/fields" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved datasource",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Datasource" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
+    },
+    "/device/devices/{deviceId}/devicedatasources": {
+      "get": {
+        "summary": "List device datasources",
+        "description": "Retrieve datasources applied to a specific device",
+        "operationId": "getDeviceDatasourceList",
+        "tags": ["Datasources", "Devices"],
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" },
+            "description": "The device ID"
+          },
+          { "$ref": "#/components/parameters/fields" },
+          { "$ref": "#/components/parameters/size" },
+          { "$ref": "#/components/parameters/offset" },
+          { "$ref": "#/components/parameters/filter" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved device datasources",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/DeviceDatasourcePaginationResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
+    },
+    "/device/devices/{deviceId}/devicedatasources/{id}": {
+      "get": {
+        "summary": "Get device datasource by ID",
+        "description": "Retrieve a specific datasource applied to a device",
+        "operationId": "getDeviceDatasourceById",
+        "tags": ["Datasources", "Devices"],
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" },
+            "description": "The device ID"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" },
+            "description": "The device datasource ID"
+          },
+          { "$ref": "#/components/parameters/fields" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved device datasource",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/DeviceDatasource" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
+    },
+    "/device/devices/{deviceId}/devicedatasources/{hdsId}/instances": {
+      "get": {
+        "summary": "List datasource instances",
+        "description": "Retrieve instances for a device datasource",
+        "operationId": "getDeviceDatasourceInstanceList",
+        "tags": ["Datasources", "Devices"],
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" },
+            "description": "The device ID"
+          },
+          {
+            "name": "hdsId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" },
+            "description": "The device datasource ID"
+          },
+          { "$ref": "#/components/parameters/fields" },
+          { "$ref": "#/components/parameters/size" },
+          { "$ref": "#/components/parameters/offset" },
+          { "$ref": "#/components/parameters/filter" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved datasource instances",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/DatasourceInstancePaginationResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
+    },
+    "/device/devices/{deviceId}/devicedatasources/{hdsId}/instances/{id}": {
+      "get": {
+        "summary": "Get datasource instance by ID",
+        "description": "Retrieve a specific datasource instance",
+        "operationId": "getDeviceDatasourceInstanceById",
+        "tags": ["Datasources", "Devices"],
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" },
+            "description": "The device ID"
+          },
+          {
+            "name": "hdsId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" },
+            "description": "The device datasource ID"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" },
+            "description": "The instance ID"
+          },
+          { "$ref": "#/components/parameters/fields" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved datasource instance",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/DatasourceInstance" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
+    },
+    "/device/devices/{deviceId}/devicedatasources/{hdsId}/instances/{id}/data": {
+      "get": {
+        "summary": "Get instance data",
+        "description": "Retrieve monitoring data for a datasource instance",
+        "operationId": "getDeviceDatasourceInstanceData",
+        "tags": ["Datasources", "Devices"],
+        "parameters": [
+          {
+            "name": "deviceId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" },
+            "description": "The device ID"
+          },
+          {
+            "name": "hdsId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" },
+            "description": "The device datasource ID"
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int32" },
+            "description": "The instance ID"
+          },
+          {
+            "name": "period",
+            "in": "query",
+            "schema": { "type": "number", "default": 1 },
+            "description": "Time period in hours"
+          },
+          {
+            "name": "start",
+            "in": "query",
+            "schema": { "type": "integer", "format": "int64" },
+            "description": "Start time (epoch seconds)"
+          },
+          {
+            "name": "end",
+            "in": "query",
+            "schema": { "type": "integer", "format": "int64" },
+            "description": "End time (epoch seconds)"
+          },
+          {
+            "name": "datapoints",
+            "in": "query",
+            "schema": { "type": "string" },
+            "description": "Comma-separated datapoint names"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved instance data",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/DatasourceInstanceData" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
+    },
+    "/website/groups": {
+      "get": {
+        "summary": "List website groups",
+        "description": "Retrieve a paginated list of website groups",
+        "operationId": "getWebsiteGroupList",
+        "tags": ["Website Groups"],
+        "parameters": [
+          { "$ref": "#/components/parameters/fields" },
+          { "$ref": "#/components/parameters/size" },
+          { "$ref": "#/components/parameters/offset" },
+          { "$ref": "#/components/parameters/filter" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved website group list",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/WebsiteGroupPaginationResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      },
+      "post": {
+        "summary": "Add website group",
+        "description": "Create a new website group",
+        "operationId": "addWebsiteGroup",
+        "tags": ["Website Groups"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/WebsiteGroupInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created website group",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/WebsiteGroup" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
+    },
+    "/website/groups/{id}": {
+      "get": {
+        "summary": "Get website group by ID",
+        "description": "Retrieve a specific website group",
+        "operationId": "getWebsiteGroupById",
+        "tags": ["Website Groups"],
+        "parameters": [
+          { "$ref": "#/components/parameters/websiteGroupId" },
+          { "$ref": "#/components/parameters/fields" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved website group",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/WebsiteGroup" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      },
+      "put": {
+        "summary": "Update website group",
+        "description": "Update an existing website group",
+        "operationId": "updateWebsiteGroupById",
+        "tags": ["Website Groups"],
+        "parameters": [
+          { "$ref": "#/components/parameters/websiteGroupId" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/WebsiteGroupInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated website group",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/WebsiteGroup" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      },
+      "delete": {
+        "summary": "Delete website group",
+        "description": "Delete a website group",
+        "operationId": "deleteWebsiteGroupById",
+        "tags": ["Website Groups"],
+        "parameters": [
+          { "$ref": "#/components/parameters/websiteGroupId" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted website group",
+            "content": {
+              "application/json": {
+                "schema": { "type": "object" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
+    },
+    "/setting/alert/rules": {
+      "get": {
+        "summary": "List alert rules",
+        "description": "Retrieve a paginated list of alert rules",
+        "operationId": "getAlertRuleList",
+        "tags": ["Alert Rules"],
+        "parameters": [
+          { "$ref": "#/components/parameters/fields" },
+          { "$ref": "#/components/parameters/size" },
+          { "$ref": "#/components/parameters/offset" },
+          { "$ref": "#/components/parameters/filter" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved alert rule list",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AlertRulePaginationResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
+    },
+    "/setting/alert/rules/{id}": {
+      "get": {
+        "summary": "Get alert rule by ID",
+        "description": "Retrieve a specific alert rule",
+        "operationId": "getAlertRuleById",
+        "tags": ["Alert Rules"],
+        "parameters": [
+          { "$ref": "#/components/parameters/alertRuleId" },
+          { "$ref": "#/components/parameters/fields" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved alert rule",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AlertRule" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
+    },
+    "/setting/alert/chains": {
+      "get": {
+        "summary": "List escalation chains",
+        "description": "Retrieve a paginated list of escalation chains",
+        "operationId": "getEscalationChainList",
+        "tags": ["Escalation Chains"],
+        "parameters": [
+          { "$ref": "#/components/parameters/fields" },
+          { "$ref": "#/components/parameters/size" },
+          { "$ref": "#/components/parameters/offset" },
+          { "$ref": "#/components/parameters/filter" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved escalation chain list",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/EscalationChainPaginationResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
+    },
+    "/setting/alert/chains/{id}": {
+      "get": {
+        "summary": "Get escalation chain by ID",
+        "description": "Retrieve a specific escalation chain",
+        "operationId": "getEscalationChainById",
+        "tags": ["Escalation Chains"],
+        "parameters": [
+          { "$ref": "#/components/parameters/escalationChainId" },
+          { "$ref": "#/components/parameters/fields" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved escalation chain",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/EscalationChain" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
+    },
+    "/setting/netscans": {
+      "get": {
+        "summary": "List netscans",
+        "description": "Retrieve a paginated list of network scans",
+        "operationId": "getNetscanList",
+        "tags": ["Netscans"],
+        "parameters": [
+          { "$ref": "#/components/parameters/fields" },
+          { "$ref": "#/components/parameters/size" },
+          { "$ref": "#/components/parameters/offset" },
+          { "$ref": "#/components/parameters/filter" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved netscan list",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/NetscanPaginationResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
+    },
+    "/setting/netscans/{id}": {
+      "get": {
+        "summary": "Get netscan by ID",
+        "description": "Retrieve a specific network scan",
+        "operationId": "getNetscanById",
+        "tags": ["Netscans"],
+        "parameters": [
+          { "$ref": "#/components/parameters/netscanId" },
+          { "$ref": "#/components/parameters/fields" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved netscan",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Netscan" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
+    },
+    "/setting/collector/groups": {
+      "get": {
+        "summary": "List collector groups",
+        "description": "Retrieve a paginated list of collector groups",
+        "operationId": "getCollectorGroupList",
+        "tags": ["Collector Groups"],
+        "parameters": [
+          { "$ref": "#/components/parameters/fields" },
+          { "$ref": "#/components/parameters/size" },
+          { "$ref": "#/components/parameters/offset" },
+          { "$ref": "#/components/parameters/filter" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved collector group list",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CollectorGroupPaginationResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
+    },
+    "/setting/collector/groups/{id}": {
+      "get": {
+        "summary": "Get collector group by ID",
+        "description": "Retrieve a specific collector group",
+        "operationId": "getCollectorGroupById",
+        "tags": ["Collector Groups"],
+        "parameters": [
+          { "$ref": "#/components/parameters/collectorGroupId" },
+          { "$ref": "#/components/parameters/fields" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved collector group",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CollectorGroup" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
+    },
+    "/dashboard/groups": {
+      "get": {
+        "summary": "List dashboard groups",
+        "description": "Retrieve a paginated list of dashboard groups",
+        "operationId": "getDashboardGroupList",
+        "tags": ["Dashboard Groups"],
+        "parameters": [
+          { "$ref": "#/components/parameters/fields" },
+          { "$ref": "#/components/parameters/size" },
+          { "$ref": "#/components/parameters/offset" },
+          { "$ref": "#/components/parameters/filter" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved dashboard group list",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/DashboardGroupPaginationResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
+    },
+    "/dashboard/groups/{id}": {
+      "get": {
+        "summary": "Get dashboard group by ID",
+        "description": "Retrieve a specific dashboard group",
+        "operationId": "getDashboardGroupById",
+        "tags": ["Dashboard Groups"],
+        "parameters": [
+          { "$ref": "#/components/parameters/dashboardGroupId" },
+          { "$ref": "#/components/parameters/fields" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved dashboard group",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/DashboardGroup" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
+    },
+    "/setting/opsnotes": {
+      "get": {
+        "summary": "List ops notes",
+        "description": "Retrieve a paginated list of operational notes",
+        "operationId": "getOpsNoteList",
+        "tags": ["OpsNotes"],
+        "parameters": [
+          { "$ref": "#/components/parameters/fields" },
+          { "$ref": "#/components/parameters/size" },
+          { "$ref": "#/components/parameters/offset" },
+          { "$ref": "#/components/parameters/filter" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved ops note list",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/OpsNotePaginationResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      },
+      "post": {
+        "summary": "Add ops note",
+        "description": "Create a new operational note",
+        "operationId": "addOpsNote",
+        "tags": ["OpsNotes"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/OpsNoteInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created ops note",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/OpsNote" }
+              }
+            }
+          },
+          "400": { "$ref": "#/components/responses/BadRequest" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
+    },
+    "/setting/opsnotes/{id}": {
+      "get": {
+        "summary": "Get ops note by ID",
+        "description": "Retrieve a specific operational note",
+        "operationId": "getOpsNoteById",
+        "tags": ["OpsNotes"],
+        "parameters": [
+          { "$ref": "#/components/parameters/opsNoteId" },
+          { "$ref": "#/components/parameters/fields" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved ops note",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/OpsNote" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "429": { "$ref": "#/components/responses/TooManyRequests" },
+          "500": { "$ref": "#/components/responses/InternalServerError" }
+        }
+      }
     }
   },
   "components": {
@@ -1020,6 +2082,76 @@
         "required": true,
         "schema": { "type": "integer", "format": "int32" },
         "description": "The admin user ID"
+      },
+      "websiteId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "integer", "format": "int32" },
+        "description": "The website ID"
+      },
+      "reportId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "integer", "format": "int32" },
+        "description": "The report ID"
+      },
+      "datasourceId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "integer", "format": "int32" },
+        "description": "The datasource ID"
+      },
+      "websiteGroupId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "integer", "format": "int32" },
+        "description": "The website group ID"
+      },
+      "alertRuleId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "integer", "format": "int32" },
+        "description": "The alert rule ID"
+      },
+      "escalationChainId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "integer", "format": "int32" },
+        "description": "The escalation chain ID"
+      },
+      "netscanId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "integer", "format": "int32" },
+        "description": "The netscan ID"
+      },
+      "collectorGroupId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "integer", "format": "int32" },
+        "description": "The collector group ID"
+      },
+      "dashboardGroupId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "integer", "format": "int32" },
+        "description": "The dashboard group ID"
+      },
+      "opsNoteId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": { "type": "string" },
+        "description": "The ops note ID"
       }
     },
     "responses": {
@@ -1436,6 +2568,648 @@
           "items": {
             "type": "array",
             "items": { "$ref": "#/components/schemas/Admin" }
+          }
+        }
+      },
+      "Website": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int32", "readOnly": true },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "domain": { "type": "string", "description": "Website domain to monitor" },
+          "type": { "type": "string", "enum": ["webcheck", "pingcheck"], "description": "Type of website check" },
+          "groupId": { "type": "integer", "format": "int32" },
+          "pollingInterval": { "type": "integer", "format": "int32", "description": "Check interval in minutes" },
+          "status": { "type": "string", "description": "Current status" },
+          "overallAlertLevel": { "type": "string", "enum": ["warn", "error", "critical"] },
+          "individualAlertLevel": { "type": "string", "enum": ["warn", "error", "critical"] },
+          "disableAlerting": { "type": "boolean" },
+          "stopMonitoring": { "type": "boolean" },
+          "useDefaultAlertSetting": { "type": "boolean" },
+          "useDefaultLocationSetting": { "type": "boolean" },
+          "isInternal": { "type": "boolean" },
+          "transition": { "type": "integer", "format": "int32" },
+          "globalSmAlertCond": { "type": "integer", "format": "int32" },
+          "individualSmAlertEnable": { "type": "boolean" },
+          "lastUpdated": { "type": "integer", "format": "int64", "readOnly": true },
+          "userPermission": { "type": "string", "readOnly": true },
+          "checkpoints": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "integer", "format": "int32" },
+                "geoInfo": { "type": "string" }
+              }
+            },
+            "readOnly": true
+          },
+          "collectors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "integer", "format": "int32" },
+                "status": { "type": "string" }
+              }
+            }
+          },
+          "properties": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Property" }
+          }
+        }
+      },
+      "WebsiteInput": {
+        "type": "object",
+        "required": ["name", "domain", "type"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "domain": { "type": "string", "description": "Website domain to monitor" },
+          "type": { "type": "string", "enum": ["webcheck", "pingcheck"], "description": "Type of website check" },
+          "groupId": { "type": "integer", "format": "int32", "default": 1 },
+          "pollingInterval": { "type": "integer", "format": "int32", "default": 5 },
+          "disableAlerting": { "type": "boolean" },
+          "stopMonitoring": { "type": "boolean" },
+          "useDefaultAlertSetting": { "type": "boolean", "default": true },
+          "useDefaultLocationSetting": { "type": "boolean", "default": true },
+          "isInternal": { "type": "boolean", "default": false },
+          "properties": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/PropertyInput" }
+          }
+        }
+      },
+      "WebsitePaginationResponse": {
+        "type": "object",
+        "properties": {
+          "total": { "type": "integer", "format": "int32" },
+          "searchId": { "type": "string" },
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Website" }
+          }
+        }
+      },
+      "Report": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int32", "readOnly": true },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "type": { "type": "string", "description": "Report type (Alert, Host Metrics, etc.)" },
+          "groupId": { "type": "integer", "format": "int32" },
+          "format": { "type": "string", "enum": ["HTML", "PDF", "CSV", "WORD"] },
+          "delivery": { "type": "string" },
+          "schedule": { "type": "string", "description": "Cron-style schedule" },
+          "scheduleTimezone": { "type": "string" },
+          "lastGenerateOn": { "type": "integer", "format": "int64", "readOnly": true },
+          "lastGenerateSize": { "type": "integer", "format": "int64", "readOnly": true },
+          "lastGeneratePages": { "type": "integer", "format": "int32", "readOnly": true },
+          "enableViewAsOtherUser": { "type": "boolean" },
+          "reportLinkNum": { "type": "integer", "format": "int32" },
+          "reportLinkExpire": { "type": "string" },
+          "userPermission": { "type": "string", "readOnly": true },
+          "lastmodifyUserId": { "type": "integer", "format": "int32", "readOnly": true },
+          "lastmodifyUserName": { "type": "string", "readOnly": true },
+          "recipients": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": { "type": "string" },
+                "addr": { "type": "string" }
+              }
+            }
+          }
+        }
+      },
+      "ReportPaginationResponse": {
+        "type": "object",
+        "properties": {
+          "total": { "type": "integer", "format": "int32" },
+          "searchId": { "type": "string" },
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Report" }
+          }
+        }
+      },
+      "GenerateReportRequest": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string", "description": "Output format override" },
+          "dateRange": { "type": "string", "description": "Date range override" }
+        }
+      },
+      "GenerateReportResult": {
+        "type": "object",
+        "properties": {
+          "reportId": { "type": "integer", "format": "int32" },
+          "taskId": { "type": "integer", "format": "int32" },
+          "resulturl": { "type": "string", "description": "URL to download the generated report" }
+        }
+      },
+      "Datasource": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int32", "readOnly": true },
+          "name": { "type": "string" },
+          "displayName": { "type": "string" },
+          "description": { "type": "string" },
+          "appliesTo": { "type": "string", "description": "AppliesTo expression" },
+          "group": { "type": "string" },
+          "collectMethod": { "type": "string" },
+          "hasMultiInstances": { "type": "boolean" },
+          "lineageId": { "type": "string", "readOnly": true },
+          "checksum": { "type": "string", "readOnly": true },
+          "dataPoints": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "integer", "format": "int32" },
+                "name": { "type": "string" },
+                "type": { "type": "integer", "format": "int32" },
+                "description": { "type": "string" }
+              }
+            }
+          }
+        }
+      },
+      "DatasourcePaginationResponse": {
+        "type": "object",
+        "properties": {
+          "total": { "type": "integer", "format": "int32" },
+          "searchId": { "type": "string" },
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Datasource" }
+          }
+        }
+      },
+      "DeviceDatasource": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int32", "readOnly": true },
+          "deviceId": { "type": "integer", "format": "int32" },
+          "deviceName": { "type": "string", "readOnly": true },
+          "deviceDisplayName": { "type": "string", "readOnly": true },
+          "dataSourceId": { "type": "integer", "format": "int32" },
+          "dataSourceName": { "type": "string", "readOnly": true },
+          "dataSourceDisplayName": { "type": "string", "readOnly": true },
+          "dataSourceDescription": { "type": "string", "readOnly": true },
+          "dataSourceType": { "type": "string" },
+          "instanceNumber": { "type": "integer", "format": "int32", "readOnly": true },
+          "monitoringInstanceNumber": { "type": "integer", "format": "int32", "readOnly": true },
+          "alertStatus": { "type": "string" },
+          "alertStatusPriority": { "type": "integer", "format": "int32" },
+          "alertDisableStatus": { "type": "string" },
+          "sdtStatus": { "type": "string" },
+          "sdtAt": { "type": "string" },
+          "stopMonitoring": { "type": "boolean" },
+          "autoDiscovery": { "type": "boolean" },
+          "collectMethod": { "type": "string" },
+          "isMultiple": { "type": "boolean" },
+          "createdOn": { "type": "integer", "format": "int64", "readOnly": true },
+          "updatedOn": { "type": "integer", "format": "int64", "readOnly": true },
+          "assignedOn": { "type": "integer", "format": "int64", "readOnly": true },
+          "nextAutoDiscoveryOn": { "type": "integer", "format": "int64", "readOnly": true },
+          "status": { "type": "integer", "format": "int32" },
+          "graphs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "integer", "format": "int32" },
+                "name": { "type": "string" }
+              }
+            },
+            "readOnly": true
+          },
+          "overviewGraphs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "integer", "format": "int32" },
+                "name": { "type": "string" }
+              }
+            },
+            "readOnly": true
+          }
+        }
+      },
+      "DeviceDatasourcePaginationResponse": {
+        "type": "object",
+        "properties": {
+          "total": { "type": "integer", "format": "int32" },
+          "searchId": { "type": "string" },
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/DeviceDatasource" }
+          }
+        }
+      },
+      "WebsiteGroup": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int32", "readOnly": true },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "parentId": { "type": "integer", "format": "int32" },
+          "fullPath": { "type": "string", "readOnly": true },
+          "numOfWebsites": { "type": "integer", "format": "int32", "readOnly": true },
+          "numOfDirectWebsites": { "type": "integer", "format": "int32", "readOnly": true },
+          "numOfDirectSubGroups": { "type": "integer", "format": "int32", "readOnly": true },
+          "disableAlerting": { "type": "boolean" },
+          "stopMonitoring": { "type": "boolean" },
+          "testLocation": {
+            "type": "object",
+            "properties": {
+              "all": { "type": "boolean" },
+              "smgIds": { "type": "array", "items": { "type": "integer", "format": "int32" } },
+              "collectorIds": { "type": "array", "items": { "type": "integer", "format": "int32" } }
+            }
+          },
+          "properties": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Property" }
+          },
+          "userPermission": { "type": "string", "readOnly": true }
+        }
+      },
+      "WebsiteGroupInput": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "parentId": { "type": "integer", "format": "int32", "default": 1 },
+          "disableAlerting": { "type": "boolean" },
+          "stopMonitoring": { "type": "boolean" },
+          "properties": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/PropertyInput" }
+          }
+        }
+      },
+      "WebsiteGroupPaginationResponse": {
+        "type": "object",
+        "properties": {
+          "total": { "type": "integer", "format": "int32" },
+          "searchId": { "type": "string" },
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/WebsiteGroup" }
+          }
+        }
+      },
+      "AlertRule": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int32", "readOnly": true },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "priority": { "type": "integer", "format": "int32" },
+          "levelStr": { "type": "string", "description": "Alert severity filter" },
+          "devices": { "type": "array", "items": { "type": "string" } },
+          "deviceGroups": { "type": "array", "items": { "type": "string" } },
+          "datasource": { "type": "string" },
+          "instance": { "type": "string" },
+          "datapoint": { "type": "string" },
+          "escalationChainId": { "type": "integer", "format": "int32" },
+          "escalatingChainName": { "type": "string", "readOnly": true },
+          "suppressAlertClear": { "type": "boolean" },
+          "suppressAlertAckSdt": { "type": "boolean" }
+        }
+      },
+      "AlertRulePaginationResponse": {
+        "type": "object",
+        "properties": {
+          "total": { "type": "integer", "format": "int32" },
+          "searchId": { "type": "string" },
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/AlertRule" }
+          }
+        }
+      },
+      "EscalationChain": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int32", "readOnly": true },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "enableThrottling": { "type": "boolean" },
+          "throttlingPeriod": { "type": "integer", "format": "int32" },
+          "throttlingAlerts": { "type": "integer", "format": "int32" },
+          "inAlerting": { "type": "boolean", "readOnly": true },
+          "destinations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": { "type": "string" },
+                "period": { "type": "integer", "format": "int32" },
+                "stages": {
+                  "type": "array",
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "type": { "type": "string" },
+                        "addr": { "type": "string" },
+                        "contact": { "type": "string" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "ccDestinations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": { "type": "string" },
+                "addr": { "type": "string" }
+              }
+            }
+          }
+        }
+      },
+      "EscalationChainPaginationResponse": {
+        "type": "object",
+        "properties": {
+          "total": { "type": "integer", "format": "int32" },
+          "searchId": { "type": "string" },
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/EscalationChain" }
+          }
+        }
+      },
+      "Netscan": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int32", "readOnly": true },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "method": { "type": "string", "description": "nmap, nec, enhancedScript, script" },
+          "collectorId": { "type": "integer", "format": "int32" },
+          "collectorDescription": { "type": "string", "readOnly": true },
+          "collectorGroupId": { "type": "integer", "format": "int32" },
+          "collectorGroupName": { "type": "string", "readOnly": true },
+          "group": { "type": "string" },
+          "subnet": { "type": "string" },
+          "excludeDuplicateType": { "type": "string" },
+          "changeNameToken": { "type": "string" },
+          "schedule": {
+            "type": "object",
+            "properties": {
+              "type": { "type": "string" },
+              "cron": { "type": "string" },
+              "timezone": { "type": "string" },
+              "notify": { "type": "boolean" },
+              "recipients": { "type": "array", "items": { "type": "string" } }
+            }
+          },
+          "credentials": {
+            "type": "object",
+            "properties": {
+              "deviceGroupId": { "type": "integer", "format": "int32" },
+              "deviceGroupName": { "type": "string" },
+              "custom": { "type": "object" }
+            }
+          },
+          "creator": { "type": "string", "readOnly": true },
+          "nextStart": { "type": "string", "readOnly": true },
+          "nextStartEpoch": { "type": "integer", "format": "int64", "readOnly": true },
+          "nsgId": { "type": "integer", "format": "int32" },
+          "version": { "type": "integer", "format": "int32", "readOnly": true }
+        }
+      },
+      "NetscanPaginationResponse": {
+        "type": "object",
+        "properties": {
+          "total": { "type": "integer", "format": "int32" },
+          "searchId": { "type": "string" },
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Netscan" }
+          }
+        }
+      },
+      "DatasourceInstance": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int32", "readOnly": true },
+          "name": { "type": "string" },
+          "displayName": { "type": "string" },
+          "description": { "type": "string" },
+          "wildValue": { "type": "string" },
+          "wildValue2": { "type": "string" },
+          "deviceId": { "type": "integer", "format": "int32" },
+          "deviceDisplayName": { "type": "string", "readOnly": true },
+          "dataSourceId": { "type": "integer", "format": "int32" },
+          "alertStatus": { "type": "string" },
+          "alertStatusPriority": { "type": "integer", "format": "int32" },
+          "alertDisableStatus": { "type": "string" },
+          "sdtStatus": { "type": "string" },
+          "sdtAt": { "type": "string" },
+          "disableAlerting": { "type": "boolean" },
+          "stopMonitoring": { "type": "boolean" },
+          "groupId": { "type": "integer", "format": "int32" },
+          "groupName": { "type": "string", "readOnly": true },
+          "lastCollectedTime": { "type": "integer", "format": "int64", "readOnly": true },
+          "lastDataTime": { "type": "integer", "format": "int64", "readOnly": true },
+          "lastRawDataTime": { "type": "integer", "format": "int64", "readOnly": true },
+          "customProperties": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Property" }
+          },
+          "systemProperties": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Property" },
+            "readOnly": true
+          },
+          "autoProperties": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Property" },
+            "readOnly": true
+          }
+        }
+      },
+      "DatasourceInstancePaginationResponse": {
+        "type": "object",
+        "properties": {
+          "total": { "type": "integer", "format": "int32" },
+          "searchId": { "type": "string" },
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/DatasourceInstance" }
+          }
+        }
+      },
+      "DatasourceInstanceData": {
+        "type": "object",
+        "properties": {
+          "dataSourceId": { "type": "integer", "format": "int32" },
+          "dataSourceName": { "type": "string" },
+          "dataSourceDisplayName": { "type": "string" },
+          "instanceId": { "type": "integer", "format": "int32" },
+          "instanceName": { "type": "string" },
+          "instanceDisplayName": { "type": "string" },
+          "dataPoints": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "time": {
+            "type": "array",
+            "items": { "type": "integer", "format": "int64" }
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "items": { "type": "number" }
+            }
+          }
+        }
+      },
+      "CollectorGroup": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int32", "readOnly": true },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "numOfCollectors": { "type": "integer", "format": "int32", "readOnly": true },
+          "createOn": { "type": "integer", "format": "int64", "readOnly": true },
+          "userPermission": { "type": "string", "readOnly": true },
+          "autoBalance": { "type": "boolean" },
+          "autoBalanceStrategy": { "type": "string" },
+          "autoBalanceDeviceCountThreshold": { "type": "integer", "format": "int32" },
+          "autoBalanceInstanceCountThreshold": { "type": "integer", "format": "int32" }
+        }
+      },
+      "CollectorGroupPaginationResponse": {
+        "type": "object",
+        "properties": {
+          "total": { "type": "integer", "format": "int32" },
+          "searchId": { "type": "string" },
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/CollectorGroup" }
+          }
+        }
+      },
+      "DashboardGroup": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "format": "int32", "readOnly": true },
+          "name": { "type": "string" },
+          "description": { "type": "string" },
+          "parentId": { "type": "integer", "format": "int32" },
+          "fullPath": { "type": "string", "readOnly": true },
+          "numOfDashboards": { "type": "integer", "format": "int32", "readOnly": true },
+          "numOfDirectDashboards": { "type": "integer", "format": "int32", "readOnly": true },
+          "numOfDirectSubGroups": { "type": "integer", "format": "int32", "readOnly": true },
+          "widgetTokens": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" },
+                "value": { "type": "string" }
+              }
+            }
+          },
+          "userPermission": { "type": "string", "readOnly": true }
+        }
+      },
+      "DashboardGroupPaginationResponse": {
+        "type": "object",
+        "properties": {
+          "total": { "type": "integer", "format": "int32" },
+          "searchId": { "type": "string" },
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/DashboardGroup" }
+          }
+        }
+      },
+      "OpsNote": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "readOnly": true },
+          "note": { "type": "string" },
+          "happenedOn": { "type": "integer", "format": "int64", "description": "Unix epoch timestamp" },
+          "happenedOnLocal": { "type": "string", "readOnly": true },
+          "createdBy": { "type": "string", "readOnly": true },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "string" },
+                "name": { "type": "string" }
+              }
+            }
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": { "type": "string" },
+                "groupId": { "type": "integer", "format": "int32" },
+                "deviceId": { "type": "integer", "format": "int32" }
+              }
+            }
+          }
+        }
+      },
+      "OpsNoteInput": {
+        "type": "object",
+        "required": ["note"],
+        "properties": {
+          "note": { "type": "string" },
+          "happenedOn": { "type": "integer", "format": "int64", "description": "Unix epoch timestamp, defaults to current time" },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" }
+              }
+            }
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": { "type": "string", "enum": ["device", "deviceGroup", "all"] },
+                "groupId": { "type": "integer", "format": "int32" },
+                "deviceId": { "type": "integer", "format": "int32" }
+              }
+            }
+          }
+        }
+      },
+      "OpsNotePaginationResponse": {
+        "type": "object",
+        "properties": {
+          "total": { "type": "integer", "format": "int32" },
+          "searchId": { "type": "string" },
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/OpsNote" }
           }
         }
       }
