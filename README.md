@@ -20,12 +20,61 @@ This repository contains an enhanced OpenAPI specification for LogicMonitor's mo
 - Proper server URL templating for multi-tenant access
 - Both LMv1 signature and Bearer token authentication
 
+## Rewst Custom Integration v2
+
+<img src="assets/logicmonitor-icon.svg" alt="LogicMonitor" width="32" align="left" style="margin-right: 10px;">
+
+A trimmed, Rewst-compatible version of the spec is available for use with [Rewst Custom Integration v2](https://docs.rewst.io/).
+
+### Why a Separate Spec?
+
+The full LogicMonitor OpenAPI spec (353 operations, ~2MB) exceeds Custom Integration v2's size limits and uses LMv1 HMAC authentication which isn't supported. The Rewst version:
+
+- **30 operations** covering the most common workflows
+- **54KB** file size (97% smaller)
+- **Bearer token auth** instead of LMv1 signatures
+- **Server variables** for multi-tenant configuration
+
+### Quick Setup
+
+1. **Generate a Bearer Token** in LogicMonitor:
+   - Navigate to **Settings → Users → API Tokens**
+   - Create a new token and copy the value
+
+2. **Import into Rewst:**
+   - Go to **Configuration → Integrations → Custom Integrations**
+   - Click **Add Custom Integration**
+   - Upload `logicmonitor-rewst.json`
+   - Configure the `company` variable (your LogicMonitor subdomain)
+   - Enter your Bearer token
+
+### Included Endpoints
+
+| Category | Operations |
+|----------|------------|
+| **Devices** | List, Get, Create, Update, Delete, Properties |
+| **Device Groups** | List, Get, Create, Update, Delete, Get Devices |
+| **Alerts** | List, Get, Acknowledge, Add Note |
+| **Collectors** | List, Get |
+| **SDTs** | List, Get, Create, Update, Delete |
+| **Dashboards** | List, Get |
+| **Admins** | List, Get |
+
+### File
+
+| File | Description |
+|------|-------------|
+| `logicmonitor-rewst.json` | Rewst CI v2 compatible spec (30 operations) |
+
+---
+
 ## Files
 
 | File | Description |
 |------|-------------|
 | `openapi.json` | OpenAPI 3.0 specification (JSON format) |
 | `openapi.yaml` | OpenAPI 3.0 specification (YAML format) |
+| `logicmonitor-rewst.json` | Rewst Custom Integration v2 compatible spec |
 | `source/` | Original specifications from LogicMonitor |
 
 ## Quick Start
