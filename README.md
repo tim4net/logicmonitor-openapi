@@ -30,7 +30,7 @@ This repository contains an enhanced OpenAPI specification for LogicMonitor's mo
 
 **Postman:**
 ```
-Import > Link > https://raw.githubusercontent.com/YOUR_USERNAME/logicmonitor-api/main/openapi.json
+Import > Link > https://raw.githubusercontent.com/tim4net/logicmonitor-openapi/main/openapi.json
 ```
 
 **Insomnia:**

@@ -38,8 +38,8 @@ If you discover endpoints not in the spec:
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/logicmonitor-api.git
-cd logicmonitor-api
+git clone https://github.com/tim4net/logicmonitor-openapi.git
+cd logicmonitor-openapi
 
 # Install validation tools (optional)
 npm install -g @apidevtools/swagger-cli
